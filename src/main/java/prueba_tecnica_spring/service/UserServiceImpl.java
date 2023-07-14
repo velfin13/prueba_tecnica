@@ -31,6 +31,13 @@ public class UserServiceImpl implements IUserService {
 				.orElseThrow(() -> new ResourceNotFoundException("User no existe!"));
 		return userDb;
 	}
+	
+	@Override
+	public UserModel logout (String email) {
+		UserModel user = userRepository.findByEmail(email);
+		user.setSession_active(false);
+		return userRepository.save(user);
+	}
 
 	@Override
 	public UserModel save(Long id, UserModel user) {

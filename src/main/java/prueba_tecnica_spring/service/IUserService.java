@@ -12,4 +12,6 @@ public interface IUserService {
 
 	UserModel save(Long id, UserModel user);
 
+	UserModel logout(String email);
+
 }
