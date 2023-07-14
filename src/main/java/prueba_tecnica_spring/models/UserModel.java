@@ -1,10 +1,18 @@
 package prueba_tecnica_spring.models;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -43,7 +51,7 @@ public class UserModel {
 
 	@Column(name = "session_active")
 	private Boolean session_active = false;
-	
+
 	@Column(name = "intentos_sesion")
 	private int intentos_login = 0;
 
@@ -51,4 +59,9 @@ public class UserModel {
 
 	@ManyToOne
 	private PersonModel person;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private List<RoleModel> roles;
 }
