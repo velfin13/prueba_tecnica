@@ -10,6 +10,7 @@ import prueba_tecnica_spring.models.PersonModel;
 import prueba_tecnica_spring.models.UserModel;
 import prueba_tecnica_spring.repository.PersonRepository;
 import prueba_tecnica_spring.repository.UserRepository;
+import prueba_tecnica_spring.util.ValidatorData;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService {
@@ -18,6 +19,8 @@ public class UserServiceImpl implements IUserService {
 	private UserRepository userRepository;
 	@Autowired
 	private PersonRepository personRepository;
+	
+	private ValidatorData validatorData;
 
 	@Override
 	public List<UserModel> getAll() {
@@ -36,10 +39,27 @@ public class UserServiceImpl implements IUserService {
 		PersonModel personDb = personRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Persona no existe!"));
 		UserModel newUser = new UserModel();
-		newUser.setEmail("test5655@gmail.com"); // to do: autogenerar
+		String uniqueEmail = generateUniqueEmail(personDb.getName(),personDb.getLastname(),personDb.getIdentification());
+        newUser.setEmail(uniqueEmail);
 		newUser.setPassword(user.getPassword());
 		newUser.setUsername(user.getUsername());
 		newUser.setPerson(personDb);
 		return userRepository.save(newUser);
+	}
+	
+	
+	private String generateUniqueEmail(String name, String lastname, String identification) {
+		String dominio = "@mail.com";
+	    String baseEmail = name.toLowerCase() + lastname.toLowerCase() + dominio;
+	    String uniqueEmail = baseEmail;
+	    int counter = 1;
+
+	    while (userRepository.existsByEmail(uniqueEmail)) {
+	    	
+	    	uniqueEmail = name.toLowerCase() + lastname.toLowerCase() +"-" + counter+ dominio;
+	        counter++;
+	    }
+
+	    return uniqueEmail;
 	}
 }

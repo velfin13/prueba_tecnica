@@ -1,6 +1,13 @@
 package prueba_tecnica_spring.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import prueba_tecnica_spring.repository.UserRepository;
+
 public class ValidatorData {
+	@Autowired
+	private UserRepository userRepository;
+	
 	public static boolean isValidIdentification(String identification) {
         for (int i = 0; i <= identification.length() - 4; i++) {
             char currentChar = identification.charAt(i);
@@ -21,20 +28,9 @@ public class ValidatorData {
         return true;
     }
 	
-	public String generateEmail(String name, String lastname,String identificacion) {
-		String firstNameInitial = name.substring(0, 1).toLowerCase();
-		String lastName = lastname.split(" ")[0].toLowerCase();
-		String identificationLastFourDigits = identificacion.substring(identificacion.length() - 4);
-
-		String email = firstNameInitial + lastName + identificationLastFourDigits + "@mail.com";
-		return email;
-	}
 	
 	public static boolean isEmail(String input) {
-	    // Expresión regular para validar un correo electrónico
 	    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-	    
-	    // Verificar si el input coincide con el patrón de un correo electrónico
 	    return input.matches(emailRegex);
 	}
 }
