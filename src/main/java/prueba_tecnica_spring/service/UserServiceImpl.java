@@ -36,13 +36,19 @@ public class UserServiceImpl implements IUserService {
 	public UserModel save(Long id, UserModel user) {
 		PersonModel personDb = personRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Persona no existe!"));
-		UserModel newUser = new UserModel();
-		String uniqueEmail = generateUniqueEmail(personDb.getName(),personDb.getLastname(),personDb.getIdentification());
-        newUser.setEmail(uniqueEmail);
-		newUser.setPassword(user.getPassword());
-		newUser.setUsername(user.getUsername());
-		newUser.setPerson(personDb);
-		return userRepository.save(newUser);
+		
+		if (userRepository.countUsersByPersonId(id)<=1) {
+			UserModel newUser = new UserModel();
+			String uniqueEmail = generateUniqueEmail(personDb.getName(),personDb.getLastname(),personDb.getIdentification());
+	        newUser.setEmail(uniqueEmail);
+			newUser.setPassword(user.getPassword());
+			newUser.setUsername(user.getUsername());
+			newUser.setPerson(personDb);
+			return userRepository.save(newUser);
+		}
+		
+		return null;
+		
 	}
 	
 	

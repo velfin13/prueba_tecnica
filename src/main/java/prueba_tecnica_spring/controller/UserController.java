@@ -42,8 +42,16 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new ResponseMessage(bindingResult.getFieldError().getDefaultMessage()));
 		}
+		
+		UserModel newUser =  userService.save(id, user);
+		
+		if (newUser == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ResponseMessage("Has exedido el limite de registro de usuario, solo se permiten 2!"));
 
-		return new ResponseEntity<>(userService.save(id, user), HttpStatus.CREATED);
+		}
+
+		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 	}
 
 }
