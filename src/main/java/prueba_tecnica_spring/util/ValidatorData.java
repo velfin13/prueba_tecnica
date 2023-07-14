@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import prueba_tecnica_spring.repository.UserRepository;
 
 public class ValidatorData {
-	@Autowired
-	private UserRepository userRepository;
 	
 	public static boolean isValidIdentification(String identification) {
         for (int i = 0; i <= identification.length() - 4; i++) {

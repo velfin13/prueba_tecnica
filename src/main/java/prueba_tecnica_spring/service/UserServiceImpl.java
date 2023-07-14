@@ -10,7 +10,6 @@ import prueba_tecnica_spring.models.PersonModel;
 import prueba_tecnica_spring.models.UserModel;
 import prueba_tecnica_spring.repository.PersonRepository;
 import prueba_tecnica_spring.repository.UserRepository;
-import prueba_tecnica_spring.util.ValidatorData;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService {
@@ -20,7 +19,6 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private PersonRepository personRepository;
 	
-	private ValidatorData validatorData;
 
 	@Override
 	public List<UserModel> getAll() {
