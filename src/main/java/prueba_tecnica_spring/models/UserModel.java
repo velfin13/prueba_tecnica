@@ -41,7 +41,11 @@ public class UserModel {
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
+	@Column(name = "session_active")
 	private Boolean session_active = false;
+	
+	@Column(name = "intentos_sesion")
+	private int intentos_login = 0;
 
 	private Boolean status = true;
 

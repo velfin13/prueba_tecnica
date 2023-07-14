@@ -1,6 +1,7 @@
 package prueba_tecnica_spring.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,10 @@ import prueba_tecnica_spring.models.UserModel;
 import prueba_tecnica_spring.service.UserServiceImpl;
 import prueba_tecnica_spring.util.ResponseMessage;
 
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+	
 	@Autowired
 	private UserServiceImpl userService;
 
@@ -42,9 +43,9 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new ResponseMessage(bindingResult.getFieldError().getDefaultMessage()));
 		}
-		
-		UserModel newUser =  userService.save(id, user);
-		
+
+		UserModel newUser = userService.save(id, user);
+
 		if (newUser == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(new ResponseMessage("Has exedido el limite de registro de usuario, solo se permiten 2!"));
