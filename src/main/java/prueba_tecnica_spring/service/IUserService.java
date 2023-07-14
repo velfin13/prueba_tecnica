@@ -8,4 +8,8 @@ public interface IUserService {
 
 	List<UserModel> getAll();
 
+	UserModel getById(Long id);
+
+	UserModel save(Long id, UserModel user);
+
 }

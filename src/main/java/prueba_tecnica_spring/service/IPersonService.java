@@ -8,4 +8,10 @@ public interface IPersonService {
 
 	List<PersonModel> getAll();
 
+	PersonModel save(PersonModel user);
+
+	PersonModel update(Long id, PersonModel user);
+
+	PersonModel getById(Long id);
+
 }

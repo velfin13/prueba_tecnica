@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import prueba_tecnica_spring.models.UserModel;
 
-public interface UserRepository extends JpaRepository<UserModel, String> {
+public interface UserRepository extends JpaRepository<UserModel, Long> {
 
 	@Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
 	UserModel findByEmail(String email);

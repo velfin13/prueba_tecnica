@@ -5,17 +5,41 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import prueba_tecnica_spring.exeptions.ResourceNotFoundException;
+import prueba_tecnica_spring.models.PersonModel;
 import prueba_tecnica_spring.models.UserModel;
+import prueba_tecnica_spring.repository.PersonRepository;
 import prueba_tecnica_spring.repository.UserRepository;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService {
 
-	 @Autowired
-	    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private PersonRepository personRepository;
 
-	    @Override
-	    public List<UserModel> getAll() {
-	        return userRepository.findAll();
-	    }
+	@Override
+	public List<UserModel> getAll() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public UserModel getById(Long id) {
+		UserModel userDb = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User no existe!"));
+		return userDb;
+	}
+
+	@Override
+	public UserModel save(Long id, UserModel user) {
+		PersonModel personDb = personRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Persona no existe!"));
+		UserModel newUser = new UserModel();
+		newUser.setEmail("test5655@gmail.com"); // to do: autogenerar
+		newUser.setPassword(user.getPassword());
+		newUser.setUsername(user.getUsername());
+		newUser.setPerson(personDb);
+		return userRepository.save(newUser);
+	}
 }
