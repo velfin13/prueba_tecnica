@@ -3,22 +3,22 @@
    <a href="https://www.docker.com/" target="blank"><img src="https://storage.googleapis.com/static.ianlewis.org/prod/img/docker/large_v-trans.png" width="150" alt="Nest Logo" /></a>
 </p>
 
-# Levantar la base de datos de Mysql con docker
+# Levantar la base de datos de Postgres con docker
 
 1) clone el repositorio
 
 
 ```bash
- git clone https://github.com/velfin13/prueba-tecnica-viamatica.git
+ https://github.com/velfin13/prueba_tecnica.git
 
-  cd prueba-tecnica-viamatica/db
+  cd prueba_tecnica/db
 ```
     
 2) Configure sus credenciales de la base de datos en el archivo **.env**
-```bash
-MYSQL_ROOT_PASSWORD=password
-MYSQL_USER=user
-MYSQL_PASSWORD=password
+```
+POSTGRES_USER=velkin
+POSTGRES_PASSWORD=password
+POSTGRES_DB=prueba_tec
 ```
 
 3) Levante el servicio con
@@ -30,13 +30,19 @@ MYSQL_PASSWORD=password
 ```bash
   docker-compose down
 ```
-## Para poder gestionar la base de datos en **phpmyadmin** escriba en su navegador
+## En el cliente de la base de datos ejecute el procedimiento almacenado para eliminar intentos de inicio de session
 
-```bash
-  http://localhost:8080/
+```
+CREATE OR REPLACE PROCEDURE reset_intentos_sesion()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE users SET intentos_sesion = 0 WHERE intentos_sesion > 0;
+    COMMIT;
+END;
+$$;
 ```
 
-Ingresa las credenciales que configuraste y listo!
 
 # Para levantar la Api en modo desarrolo
 
@@ -49,26 +55,8 @@ Ingresa las credenciales que configuraste y listo!
     
 
 
-## Para ver los endpints escriba en el navegador
-
-```bash
-  http://localhost:3000/swagger-ui/index.html
-```
-
-## O, tambien puedes acceder por medio de Postman 
+## Para ver los endpints escriba en el navegador 
 ```
 https://documenter.getpostman.com/view/14749617/2s946bCFC9
 ```
 
-
-
-```
-CREATE OR REPLACE PROCEDURE reset_intentos_sesion()
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    UPDATE users SET intentos_sesion = 0 WHERE intentos_sesion > 0;
-    COMMIT;
-END;
-$$;
-```
