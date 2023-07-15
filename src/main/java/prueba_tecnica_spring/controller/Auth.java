@@ -30,12 +30,18 @@ public class Auth {
 
 	@Autowired
 	private UserServiceImpl userService;
-	
+
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(@RequestBody Map<String, String> data){
-		String email = data.get("email");
-		userService.logout(email);
-		return ResponseEntity.ok(new ResponseMessage("Cerraste Sesion con exito!"));
+	public ResponseEntity<?> logout(@RequestBody Map<String, String> data) {
+		String userOrEmail = data.get("userOrEmail");
+		UserModel userSingOut = userService.logout(userOrEmail);
+		if (userSingOut != null) {
+			return ResponseEntity.ok(new ResponseMessage("Cerraste Sesion con exito!"));
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ResponseMessage("No existe este usuario"));
+		}
+
 	}
 
 	@PostMapping("/singin")
@@ -59,12 +65,12 @@ public class Auth {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.body(new ResponseMessage("Ya iniciaste sesion en otro ordenador"));
 			}
-			
+
 			SessionModel session = new SessionModel();
 			session.setFechaInicio(new Date());
 			session.setUser(user);
 			sessionRepo.save(session);
-			
+
 			user.setSession_active(true);
 			userRepository.save(user);
 			return ResponseEntity.ok(user);
