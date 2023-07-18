@@ -60,5 +60,5 @@ public class UserModel {
 	@ManyToOne
 	private PersonModel person;
 	
-	private String roles;
+	private String roles = "USER";
 }
