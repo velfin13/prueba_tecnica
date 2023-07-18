@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import prueba_tecnica_spring.models.UserModel;
 import prueba_tecnica_spring.repository.UserRepository;
+import prueba_tecnica_spring.util.ValidatorData;
 
 
 @Service
@@ -19,16 +20,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UserRepository userRepoitory;
 	
 	 @Override
-	    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	        UserModel usuario = userRepoitory.findByUsername(username);
-	        if (usuario == null) {
-	            throw new UsernameNotFoundException("Usuario no encontrado: " + username);
+	    public UserDetails loadUserByUsername(String userOrEmail) throws UsernameNotFoundException {
+	     
+		 UserModel user = null;
+		 
+		 if (ValidatorData.isEmail(userOrEmail)) {
+			 user = userRepoitory.findByEmail(userOrEmail);
+			} else {
+				user = userRepoitory.findByUsername(userOrEmail);
+			}
+
+		 
+	        
+	        if (user == null) {
+	            throw new UsernameNotFoundException("Usuario no encontrado: " + user);
 	        }
 
 	        return User.builder()
-	                .username(usuario.getUsername())
-	                .password(usuario.getPassword())
-	                .roles(usuario.getRoles())
+	                .username(user.getUsername())
+	                .password(user.getPassword())
+	                .roles(user.getRoles())
 	                .build();
 	    }
 
