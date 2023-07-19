@@ -26,6 +26,11 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	public List<UserModel> getAllUserWithRols(String username) {
+		return userRepository.getUserDataByUsername(username);
+	}
+
+	@Override
 	public UserModel getById(Long id) {
 		UserModel userDb = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User no existe!"));

@@ -8,6 +8,8 @@ public interface IUserService {
 
 	List<UserModel> getAll();
 
+	List<UserModel> getAllUserWithRols(String username);
+
 	UserModel getById(Long id);
 
 	UserModel save(Long id, UserModel user);

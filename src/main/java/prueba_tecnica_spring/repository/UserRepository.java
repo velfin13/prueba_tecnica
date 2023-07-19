@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import prueba_tecnica_spring.models.UserModel;
 
+import java.util.List;
+
 public interface UserRepository extends JpaRepository<UserModel, Long> {
 
 	@Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
@@ -19,5 +21,8 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 	
 	@Query("SELECT COUNT(u) FROM UserModel u WHERE u.person.id = :personId")
     int countUsersByPersonId(Long personId);
+
+	@Query(value = "SELECT * FROM get_user_data_by_username(:username)", nativeQuery = true)
+	List<UserModel> getUserDataByUsername(String username);
 
 }
