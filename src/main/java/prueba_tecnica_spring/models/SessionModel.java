@@ -1,7 +1,6 @@
 package prueba_tecnica_spring.models;
 
 import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b>  SessionModel for JPA<br>
+ */
 @Entity
 @Data
 @AllArgsConstructor

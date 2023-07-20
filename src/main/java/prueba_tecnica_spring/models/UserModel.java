@@ -2,9 +2,7 @@ package prueba_tecnica_spring.models;
 
 import java.io.Serializable;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +25,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b> UserModel for JPA <br>
+ */
 @Entity
 @Data
 @AllArgsConstructor
@@ -39,7 +41,7 @@ public class UserModel implements Serializable {
 
 	@Column(name = "username", nullable = false, unique = true)
 	@NotBlank(message = "La username es obligatoria")
-	@Pattern(regexp = "^[^!@#$%^&*()_+=\\-\\[\\]{};':\"\\\\|,.<>/?]*$", message = "El nombre no debe contener signos")
+	@Pattern(regexp = "^[^!@#$%^&*()_+=\\-\\[\\]{};':\"\\\\|,.<>/?]*$", message = "El username no debe contener signos")
 	@NotNull(message = "El campo username es obligatorio")
 	private String username;
 
@@ -47,7 +49,7 @@ public class UserModel implements Serializable {
 	@NotNull(message = "El campo password es obligatorio")
 	@NotBlank(message = "La contraseña es obligatoria")
 	@Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-	@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-\\[\\]{};':\"\\\\|,.<>/?]).*$", message = "La contraseña no cumple con los requisitos")
+	@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+=\\-\\[\\]{};':\"\\\\|,.<>/?]).*$", message = "La password no cumple con los requisitos")
 	private String password;
 
 	@Column(name = "email", nullable = false, unique = true)

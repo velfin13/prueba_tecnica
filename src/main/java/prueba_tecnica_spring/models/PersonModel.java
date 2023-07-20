@@ -2,9 +2,7 @@ package prueba_tecnica_spring.models;
 
 import java.util.Date;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +18,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b>  UserModel for JPA<br>
+ */
 @Entity
 @Table(name = "persons")
 @Data
