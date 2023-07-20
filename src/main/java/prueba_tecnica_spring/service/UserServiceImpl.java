@@ -1,12 +1,15 @@
 package prueba_tecnica_spring.service;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import prueba_tecnica_spring.exeptions.ResourceNotFoundException;
 import prueba_tecnica_spring.models.PersonModel;
+import prueba_tecnica_spring.models.SessionModel;
 import prueba_tecnica_spring.models.UserModel;
 import prueba_tecnica_spring.repository.PersonRepository;
+import prueba_tecnica_spring.repository.SessionRepository;
 import prueba_tecnica_spring.repository.UserRepository;
 import prueba_tecnica_spring.util.ValidatorData;
 
@@ -17,12 +20,14 @@ import prueba_tecnica_spring.util.ValidatorData;
 @Service("userService")
 public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
+    private final SessionRepository sessionRepository;
     private final PersonRepository personRepository;
 
     @Autowired
-    public UserServiceImpl(PersonRepository personRepository,UserRepository userRepository) {
+    public UserServiceImpl(SessionRepository sessionRepository,PersonRepository personRepository,UserRepository userRepository) {
         this.personRepository = personRepository;
         this.userRepository = userRepository;
+        this.sessionRepository=sessionRepository;
     }
 
     /**
@@ -63,6 +68,13 @@ public class UserServiceImpl implements IUserService {
         }
 
         if (user != null) {
+            List<SessionModel> sessions = sessionRepository.findOpenSessionsByUserId(user.getId());
+
+            // Imprimir los ID de las sesiones
+            for (SessionModel session : sessions) {
+               session.setFechaCierre(new Date());
+               sessionRepository.save(session);
+            }
             user.setSession_active(false);
             return userRepository.save(user);
         } else {
