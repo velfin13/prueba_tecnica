@@ -10,22 +10,22 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<UserModel, Long> {
 
-	@Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
-	UserModel findByEmail(String email);
+    @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
+    UserModel findByEmail(String email);
 
-	@Query(value = "SELECT * FROM users WHERE username = :username", nativeQuery = true)
-	UserModel findByUsername(String username);
+    @Query(value = "SELECT * FROM users WHERE username = :username", nativeQuery = true)
+    UserModel findByUsername(String username);
 
-	@Query(value = "SELECT EXISTS(SELECT 1 FROM users WHERE email = :email)", nativeQuery = true)
-	boolean existsByEmail(String email);
-	
-	@Query("SELECT COUNT(u) FROM UserModel u WHERE u.person.id = :personId")
+    @Query(value = "SELECT EXISTS(SELECT 1 FROM users WHERE email = :email)", nativeQuery = true)
+    boolean existsByEmail(String email);
+
+    @Query("SELECT COUNT(u) FROM UserModel u WHERE u.person.id = :personId")
     int countUsersByPersonId(Long personId);
 
-	@Query(value = "SELECT * FROM get_user_data_by_username(:username)", nativeQuery = true)
-	UserModel getUserWithRolsByUsername(String username);
+    @Query(value = "SELECT * FROM get_user_data_by_username(:username)", nativeQuery = true)
+    UserModel getUserWithRolsByUsername(String username);
 
-	@Query(value = "SELECT * FROM get_user_with_sessions(:username)", nativeQuery = true)
-	UserModel getUserWithSessionsByUsername(String username);
+    @Query(value = "SELECT * FROM get_user_with_sessions(:username)", nativeQuery = true)
+    UserModel getUserWithSessionsByUsername(String username);
 
 }

@@ -23,37 +23,37 @@ import prueba_tecnica_spring.util.ValidatorData;
 @RestController
 @RequestMapping("/api/persons")
 public class PersonController {
-	@Autowired
-	private PersonServiceImpl personService;
+    @Autowired
+    private PersonServiceImpl personService;
 
-	@GetMapping()
-	public List<PersonModel> getAll() {
-		return personService.getAll();
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(personService.getById(id));
-	}
+    @GetMapping()
+    public List<PersonModel> getAll() {
+        return personService.getAll();
+    }
 
-	@PostMapping()
-	public ResponseEntity<?> savePerson(@Valid @RequestBody PersonModel person, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new ResponseMessage(bindingResult.getFieldError().getDefaultMessage()));
-		}
-		boolean isValid = ValidatorData.isValidIdentification(person.getIdentification());
-		if (!isValid) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new ResponseMessage("El campo identificacion posee un numero repetido 4 veces"));
-		}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(personService.getById(id));
+    }
 
-		return new ResponseEntity<>(personService.save(person), HttpStatus.CREATED);
-	}
+    @PostMapping()
+    public ResponseEntity<?> savePerson(@Valid @RequestBody PersonModel person, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseMessage(bindingResult.getFieldError().getDefaultMessage()));
+        }
+        boolean isValid = ValidatorData.isValidIdentification(person.getIdentification());
+        if (!isValid) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseMessage("El campo identificacion posee un numero repetido 4 veces"));
+        }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody PersonModel user) {
-		PersonModel userUpdated = personService.update(id, user);
-		return ResponseEntity.ok(userUpdated);
-	}
+        return new ResponseEntity<>(personService.save(person), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody PersonModel user) {
+        PersonModel userUpdated = personService.update(id, user);
+        return ResponseEntity.ok(userUpdated);
+    }
 }

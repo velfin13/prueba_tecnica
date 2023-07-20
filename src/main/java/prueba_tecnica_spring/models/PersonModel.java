@@ -27,32 +27,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PersonModel {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@Column(nullable = false)
-	@NotBlank(message = "La name es obligatoria")
-	@NotNull(message = "El campo name es obligatorio")
-	private String name;
+    @Column(nullable = false)
+    @NotBlank(message = "La name es obligatoria")
+    @NotNull(message = "El campo name es obligatorio")
+    private String name;
 
-	@Column(nullable = false)
-	@NotBlank(message = "La lastname es obligatoria")
-	@NotNull(message = "El lastname name es obligatorio")
-	private String lastname;
+    @Column(nullable = false)
+    @NotBlank(message = "La lastname es obligatoria")
+    @NotNull(message = "El lastname name es obligatorio")
+    private String lastname;
 
-	@NotBlank(message = "La identificación es obligatoria")
-	@Pattern(regexp = "\\d{10}", message = "La identificación debe tener 10 dígitos")
-	@Column(nullable = false, unique = true)
-	private String identification;
+    @NotBlank(message = "La identificación es obligatoria")
+    @Pattern(regexp = "\\d{10}", message = "La identificación debe tener 10 dígitos")
+    @Column(nullable = false, unique = true)
+    private String identification;
 
-	@Column(name = "birthdate")
-	@Past(message = "La birthdate debe ser anterior a la fecha actual")
-	@NotNull(message = "birthdate es obligatoria")
-	private Date birth;
+    @Column(name = "birthdate")
+    @Past(message = "La birthdate debe ser anterior a la fecha actual")
+    @NotNull(message = "birthdate es obligatoria")
+    private Date birth;
 
-	@OneToMany(mappedBy = "person")
-	@JsonIgnore
-	private List<UserModel> users;
+    @OneToMany(mappedBy = "person")
+    @JsonIgnore
+    private List<UserModel> users;
 
 }

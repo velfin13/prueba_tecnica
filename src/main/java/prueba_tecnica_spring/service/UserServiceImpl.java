@@ -15,79 +15,79 @@ import prueba_tecnica_spring.util.ValidatorData;
 @Service("userService")
 public class UserServiceImpl implements IUserService {
 
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private PersonRepository personRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PersonRepository personRepository;
 
-	@Override
-	public List<UserModel> getAll() {
-		return userRepository.findAll();
-	}
+    @Override
+    public List<UserModel> getAll() {
+        return userRepository.findAll();
+    }
 
-	@Override
-	public UserModel getAllUserWithRols(String username) {
-		return userRepository.getUserWithSessionsByUsername(username);
-	}
+    @Override
+    public UserModel getAllUserWithRols(String username) {
+        return userRepository.getUserWithSessionsByUsername(username);
+    }
 
-	@Override
-	public UserModel getById(Long id) {
-		UserModel userDb = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User no existe!"));
-		return userDb;
-	}
+    @Override
+    public UserModel getById(Long id) {
+        UserModel userDb = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User no existe!"));
+        return userDb;
+    }
 
-	@Override
-	public UserModel logout(String userOrEmail) {
-		UserModel user = new UserModel();
+    @Override
+    public UserModel logout(String userOrEmail) {
+        UserModel user = new UserModel();
 
-		if (ValidatorData.isEmail(userOrEmail)) {
-			user = userRepository.findByEmail(userOrEmail);
-		} else {
-			user = userRepository.findByUsername(userOrEmail);
-		}
-		
-		if (user != null) {
-			user.setSession_active(false);
-			return userRepository.save(user);
-		} else {
-			return null;
-		}
+        if (ValidatorData.isEmail(userOrEmail)) {
+            user = userRepository.findByEmail(userOrEmail);
+        } else {
+            user = userRepository.findByUsername(userOrEmail);
+        }
 
-	}
+        if (user != null) {
+            user.setSession_active(false);
+            return userRepository.save(user);
+        } else {
+            return null;
+        }
 
-	@Override
-	public UserModel save(Long id, UserModel user) {
-		PersonModel personDb = personRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Persona no existe!"));
+    }
 
-		if (userRepository.countUsersByPersonId(id) <= 1) {
-			UserModel newUser = new UserModel();
-			String uniqueEmail = generateUniqueEmail(personDb.getName(), personDb.getLastname(),
-					personDb.getIdentification());
-			newUser.setEmail(uniqueEmail);
-			newUser.setPassword(user.getPassword());
-			newUser.setUsername(user.getUsername());
-			newUser.setPerson(personDb);
-			return userRepository.save(newUser);
-		}
+    @Override
+    public UserModel save(Long id, UserModel user) {
+        PersonModel personDb = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Persona no existe!"));
 
-		return null;
+        if (userRepository.countUsersByPersonId(id) <= 1) {
+            UserModel newUser = new UserModel();
+            String uniqueEmail = generateUniqueEmail(personDb.getName(), personDb.getLastname(),
+                    personDb.getIdentification());
+            newUser.setEmail(uniqueEmail);
+            newUser.setPassword(user.getPassword());
+            newUser.setUsername(user.getUsername());
+            newUser.setPerson(personDb);
+            return userRepository.save(newUser);
+        }
 
-	}
+        return null;
 
-	private String generateUniqueEmail(String name, String lastname, String identification) {
-		String dominio = "@mail.com";
-		String baseEmail = name.toLowerCase() + lastname.toLowerCase() + dominio;
-		String uniqueEmail = baseEmail;
-		int counter = 1;
+    }
 
-		while (userRepository.existsByEmail(uniqueEmail)) {
+    private String generateUniqueEmail(String name, String lastname, String identification) {
+        String dominio = "@mail.com";
+        String baseEmail = name.toLowerCase() + lastname.toLowerCase() + dominio;
+        String uniqueEmail = baseEmail;
+        int counter = 1;
 
-			uniqueEmail = name.toLowerCase() + lastname.toLowerCase() + "-" + counter + dominio;
-			counter++;
-		}
+        while (userRepository.existsByEmail(uniqueEmail)) {
 
-		return uniqueEmail;
-	}
+            uniqueEmail = name.toLowerCase() + lastname.toLowerCase() + "-" + counter + dominio;
+            counter++;
+        }
+
+        return uniqueEmail;
+    }
 }

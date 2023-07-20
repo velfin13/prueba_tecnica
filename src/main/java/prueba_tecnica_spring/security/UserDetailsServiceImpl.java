@@ -44,11 +44,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         return User.builder().username(user.getUsername()).password(user.getPassword()).authorities(getAuthorities(user.getRoles())).build();
-//		 return new User(
-//				 user.getUsername(),
-//				 user.getPassword(),
-//				 getAuthorities(user.getRoles())
-//		 );
     }
 
     private Collection<GrantedAuthority> getAuthorities(List<Rol> roles) {

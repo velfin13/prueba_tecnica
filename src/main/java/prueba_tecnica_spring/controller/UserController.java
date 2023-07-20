@@ -23,46 +23,46 @@ import prueba_tecnica_spring.util.ResponseMessage;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-	
-	@Autowired
-	private UserServiceImpl userService;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
-	@GetMapping()
-	public List<UserModel> getAll() {
-		return userService.getAll();
-	}
+    @Autowired
+    private UserServiceImpl userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	@GetMapping("/withrols/{username}")
-	public UserModel getAllWithRols(@PathVariable String username) {
-		return userService.getAllUserWithRols(username);
-	}
+    @GetMapping()
+    public List<UserModel> getAll() {
+        return userService.getAll();
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(userService.getById(id));
-	}
+    @GetMapping("/withrols/{username}")
+    public UserModel getAllWithRols(@PathVariable String username) {
+        return userService.getAllUserWithRols(username);
+    }
 
-	@PostMapping("/{id}")
-	public ResponseEntity<?> saveUser(@PathVariable Long id, @Valid @RequestBody UserModel user,
-			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new ResponseMessage(bindingResult.getFieldError().getDefaultMessage()));
-		}
-		String encodedPassword = passwordEncoder.encode(user.getPassword());
-		user.setPassword(encodedPassword);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getById(id));
+    }
 
-		UserModel newUser = userService.save(id, user);
+    @PostMapping("/{id}")
+    public ResponseEntity<?> saveUser(@PathVariable Long id, @Valid @RequestBody UserModel user,
+                                      BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseMessage(bindingResult.getFieldError().getDefaultMessage()));
+        }
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
 
-		if (newUser == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new ResponseMessage("Has exedido el limite de registro de usuario, solo se permiten 2!"));
+        UserModel newUser = userService.save(id, user);
 
-		}
+        if (newUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseMessage("Has exedido el limite de registro de usuario, solo se permiten 2!"));
 
-		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-	}
+        }
+
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
 
 }
