@@ -33,4 +33,5 @@ public class SessionModel {
 	    @ManyToOne
 	    @JoinColumn	(name = "user_id")
 	    private UserModel user;
+
 }

@@ -27,7 +27,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public UserModel getAllUserWithRols(String username) {
-		return userRepository.getUserWithRolsByUsername(username);
+		return userRepository.getUserWithSessionsByUsername(username);
 	}
 
 	@Override

@@ -1,6 +1,11 @@
 package prueba_tecnica_spring.models;
 
+import java.io.Serializable;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class UserModel {
+public class UserModel implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -54,4 +59,8 @@ public class UserModel {
 			uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "rol_id"})
 	)
 	private List<Rol> roles;
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnoreProperties("user")
+	private List<SessionModel> sesiones;
 }
