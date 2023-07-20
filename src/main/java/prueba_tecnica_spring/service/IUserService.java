@@ -39,4 +39,9 @@ public interface IUserService {
 	 */
 	public UserModel getUserByUserOrEmail(String userOrEmail);
 
+	/**
+	 * @return String
+	 */
+	public String logoutAllUser();
+
 }

@@ -69,7 +69,6 @@ public class UserServiceImpl implements IUserService {
 
         if (user != null) {
             List<SessionModel> sessions = sessionRepository.findOpenSessionsByUserId(user.getId());
-
             // guardar la fecha del cierre de sesion
             for (SessionModel session : sessions) {
                session.setFechaCierre(new Date());
@@ -81,6 +80,30 @@ public class UserServiceImpl implements IUserService {
             return null;
         }
 
+    }
+
+    /**
+     * This method closes all sessions except those of the administrator.
+     * @return String
+     */
+    @Override
+    public String logoutAllUser() {
+        List<UserModel> users = userRepository.findAll();
+        for (UserModel userL : users) {
+            boolean isAdmin = userL.getRoles().stream().anyMatch(role -> "ADMIN".equals(role.getName()));
+            if (!isAdmin) {
+                userL.setSession_active(false);
+                userRepository.save(userL);
+                List<SessionModel> sessions = sessionRepository.findOpenSessionsByUserId(userL.getId());
+
+                // guardar la fecha del cierre de sesion
+                for (SessionModel session : sessions) {
+                    session.setFechaCierre(new Date());
+                    sessionRepository.save(session);
+                }
+            }
+        }
+        return "proceso terminado!";
     }
 
     /**

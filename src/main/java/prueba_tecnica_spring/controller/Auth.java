@@ -9,10 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
 import prueba_tecnica_spring.models.SessionModel;
@@ -60,6 +57,12 @@ public class Auth {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("No existe este usuario"));
         }
 
+    }
+
+    @GetMapping("/logoutAll")
+    public ResponseEntity<?> logoutAll(@RequestBody Map<String, String> data) {
+        String mesagge = userService.logoutAllUser();
+        return ResponseEntity.ok(new ResponseMessage(mesagge));
     }
 
     @PostMapping("/singin")
