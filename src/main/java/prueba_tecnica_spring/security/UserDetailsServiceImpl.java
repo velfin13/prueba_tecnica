@@ -22,44 +22,37 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-	
-	@Autowired
-	private UserRepository userRepoitory;
-	private ValidatorData validData = new ValidatorData();
-	
-	 @Override
-	    public UserDetails loadUserByUsername(String userOrEmail) throws UsernameNotFoundException {
-	     
-		 UserModel user = null;
-		 
-		 if (ValidatorData.isEmail(userOrEmail)) {
-			 user = userRepoitory.findByEmail(userOrEmail);
-			} else {
-				user = userRepoitory.findByUsername(userOrEmail);
-			}
 
-		 
-	        
-	        if (user == null) {
-	            throw new UsernameNotFoundException("Usuario no encontrado: " + user);
-	        }
+    @Autowired
+    private UserRepository userRepoitory;
+    private ValidatorData validData = new ValidatorData();
 
-			return User
-					.builder()
-					.username(user.getUsername())
-					.password(user.getPassword())
-					.authorities(getAuthorities(user.getRoles()))
-					.build();
+    @Override
+    public UserDetails loadUserByUsername(String userOrEmail) throws UsernameNotFoundException {
+
+        UserModel user = null;
+
+        if (ValidatorData.isEmail(userOrEmail)) {
+            user = userRepoitory.findByEmail(userOrEmail);
+        } else {
+            user = userRepoitory.findByUsername(userOrEmail);
+        }
+
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado: " + user);
+        }
+
+        return User.builder().username(user.getUsername()).password(user.getPassword()).authorities(getAuthorities(user.getRoles())).build();
 //		 return new User(
 //				 user.getUsername(),
 //				 user.getPassword(),
 //				 getAuthorities(user.getRoles())
 //		 );
-	    }
-	private Collection<GrantedAuthority> getAuthorities(List<Rol> roles) {
-		return roles.stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName()))
-				.collect(Collectors.toList());
-	}
+    }
+
+    private Collection<GrantedAuthority> getAuthorities(List<Rol> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
 
 }
