@@ -12,15 +12,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import prueba_tecnica_spring.security.JwtRequestFilter;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
@@ -30,10 +27,11 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/auth/singin").permitAll()
-                        .requestMatchers("/api/users/**").hasAnyAuthority("ADMIN", "USER")
-                        .requestMatchers("/api/persons/**").hasAnyAuthority("ADMIN", "USER")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/api/auth/singin").permitAll()
+//                        .requestMatchers("/api/users/**").hasAnyAuthority("ADMIN", "USER")
+//                        .requestMatchers("/api/persons/**").hasAnyAuthority("ADMIN", "USER")
+                                .anyRequest().authenticated()
                 )
                 .cors(withDefaults())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
@@ -41,7 +39,6 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
         ;
-
         return http.build();
     }
 

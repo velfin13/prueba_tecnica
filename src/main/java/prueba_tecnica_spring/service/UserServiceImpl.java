@@ -1,10 +1,8 @@
 package prueba_tecnica_spring.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import prueba_tecnica_spring.exeptions.ResourceNotFoundException;
 import prueba_tecnica_spring.models.PersonModel;
 import prueba_tecnica_spring.models.UserModel;
@@ -12,31 +10,48 @@ import prueba_tecnica_spring.repository.PersonRepository;
 import prueba_tecnica_spring.repository.UserRepository;
 import prueba_tecnica_spring.util.ValidatorData;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b> This class implements the IUserService methods and interacts with the repository. <br>
+ */
 @Service("userService")
 public class UserServiceImpl implements IUserService {
+    private final UserRepository userRepository;
+    private final PersonRepository personRepository;
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PersonRepository personRepository;
+    public UserServiceImpl(PersonRepository personRepository,UserRepository userRepository) {
+        this.personRepository = personRepository;
+        this.userRepository = userRepository;
+    }
 
+    /**
+     * This method returns a list of people from the database.
+     * @return List of UserModel
+     */
     @Override
     public List<UserModel> getAll() {
         return userRepository.findAll();
     }
 
-    @Override
-    public UserModel getAllUserWithRols(String username) {
-        return userRepository.getUserWithSessionsByUsername(username);
-    }
-
+    /**
+     * This method returns a person from the database by their id
+     * @param id Long
+     * @return UserModel
+     */
     @Override
     public UserModel getById(Long id) {
-        UserModel userDb = userRepository.findById(id)
+        UserModel userDb;
+        userDb = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no existe!"));
         return userDb;
     }
 
+    /**
+     * This method receives an email or a username of type string and if it exists, it closes the session of that user
+     * @param userOrEmail String
+     * @return UserModel
+     */
     @Override
     public UserModel logout(String userOrEmail) {
         UserModel user = new UserModel();
@@ -56,6 +71,12 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    /**
+     * this method receives the id of a PersonModel and a UserModel and registers a new user
+     * @param id   Long id PersonModel
+     * @param user UserModel
+     * @return UserModel
+     */
     @Override
     public UserModel save(Long id, UserModel user) {
         PersonModel personDb = personRepository.findById(id)
@@ -76,9 +97,18 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    /**
+     * This method receives an email and searches the database and if it exists, it replaces it with an identifier to make it unique.
+     * @param name String
+     * @param lastname String
+     * @param identification String
+     * @return String email unique
+     */
     private String generateUniqueEmail(String name, String lastname, String identification) {
-        String dominio = "@mail.com";
-        String baseEmail = name.toLowerCase() + lastname.toLowerCase() + dominio;
+        String dominio;
+        dominio = "@mail.com";
+        String baseEmail;
+        baseEmail = name.toLowerCase() + lastname.toLowerCase() + dominio;
         String uniqueEmail = baseEmail;
         int counter = 1;
 

@@ -34,11 +34,6 @@ public class UserController {
         return userService.getAll();
     }
 
-    @GetMapping("/withrols/{username}")
-    public UserModel getAllWithRols(@PathVariable String username) {
-        return userService.getAllUserWithRols(username);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getById(id));
