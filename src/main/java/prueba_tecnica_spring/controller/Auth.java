@@ -26,21 +26,29 @@ import prueba_tecnica_spring.util.ResponseMessage;
 import prueba_tecnica_spring.util.UserResponse;
 import prueba_tecnica_spring.util.ValidatorData;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b>  Auth Controller<br>
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class Auth {
+    private final UserRepository userRepository;
+    private final  JwtUtilService jwtUtilService;
+    private final SessionRepository sessionRepo;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService usuarioDetailsService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private SessionRepository sessionRepo;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    UserDetailsService usuarioDetailsService;
-
-    @Autowired
-    private UserServiceImpl userService;
+    public Auth(JwtUtilService jwtUtilService,UserRepository userRepository ,SessionRepository sessionRepo,UserServiceImpl userService,UserDetailsService usuarioDetailsService,AuthenticationManager authenticationManager){
+        this.userService=userService;
+        this.usuarioDetailsService=usuarioDetailsService;
+        this.authenticationManager=authenticationManager;
+        this.sessionRepo=sessionRepo;
+        this.userRepository=userRepository;
+        this.jwtUtilService=jwtUtilService;
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody Map<String, String> data) {
@@ -59,12 +67,7 @@ public class Auth {
         String userOrEmail = loginData.get("userOrEmail");
         String password = loginData.get("password");
         UserModel user = new UserModel();
-
-        if (ValidatorData.isEmail(userOrEmail)) {
-            user = userRepository.findByEmail(userOrEmail);
-        } else {
-            user = userRepository.findByUsername(userOrEmail);
-        }
+        user = userService.getUserByUserOrEmail(userOrEmail);
 
         if (user != null && PasswordUtils.isPasswordValid(password, user.getPassword())) {
             if (!user.getStatus()) {
@@ -80,7 +83,6 @@ public class Auth {
 
             final UserDetails userDetails = usuarioDetailsService.loadUserByUsername(userOrEmail);
 
-            JwtUtilService jwtUtilService = new JwtUtilService();
             String jwt = jwtUtilService.generateToken(userDetails);
 
             UserResponse response = new UserResponse(user, jwt);

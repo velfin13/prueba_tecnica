@@ -20,25 +20,45 @@ import prueba_tecnica_spring.models.UserModel;
 import prueba_tecnica_spring.service.UserServiceImpl;
 import prueba_tecnica_spring.util.ResponseMessage;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b>  UserController<br>
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
+    private final UserServiceImpl userService;
+    private final PasswordEncoder passwordEncoder;
+    
     @Autowired
-    private UserServiceImpl userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserController( UserServiceImpl userService,PasswordEncoder passwordEncoder){
+        this.userService=userService;
+        this.passwordEncoder=passwordEncoder;
+    }
 
+    /**
+     * @return List of UserModel
+     */
     @GetMapping()
     public List<UserModel> getAll() {
         return userService.getAll();
     }
 
+    /**
+     * @param id Long
+     * @return ResponseEntity
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getById(id));
     }
 
+    /**
+     * @param id Long
+     * @param user UserModel
+     * @param bindingResult BindingResult
+     * @return ResponseEntity
+     */
     @PostMapping("/{id}")
     public ResponseEntity<?> saveUser(@PathVariable Long id, @Valid @RequestBody UserModel user,
                                       BindingResult bindingResult) {

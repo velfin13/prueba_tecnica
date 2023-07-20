@@ -98,6 +98,22 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
+     * Receives a user or email in string and returns a UserModel
+     * @param userOrEmail String
+     * @return UserModel
+     */
+    @Override
+    public UserModel getUserByUserOrEmail(String userOrEmail){
+        UserModel user = new UserModel();
+        if (ValidatorData.isEmail(userOrEmail)) {
+            user = userRepository.findByEmail(userOrEmail);
+        } else {
+            user = userRepository.findByUsername(userOrEmail);
+        }
+        return  user;
+    }
+
+    /**
      * This method receives an email and searches the database and if it exists, it replaces it with an identifier to make it unique.
      * @param name String
      * @param lastname String

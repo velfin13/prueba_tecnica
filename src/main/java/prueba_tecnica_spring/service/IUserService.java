@@ -33,4 +33,10 @@ public interface IUserService {
 	 */
 	UserModel logout(String email);
 
+	/**
+	 * @param userOrEmail String
+	 * @return UserModel
+	 */
+	public UserModel getUserByUserOrEmail(String userOrEmail);
+
 }

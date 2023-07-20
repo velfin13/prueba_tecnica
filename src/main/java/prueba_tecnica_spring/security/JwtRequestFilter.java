@@ -4,11 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,16 +17,28 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * <b>Author:</b> Velfin Velasquez <br>
+ * <b>Description:</b>  JwtRequestFilter<br>
+ */
 @Component
 @Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
-
+    private final UserDetailsService userDetailsService;
+    private final JwtUtilService jwtUtilService;
     @Autowired
-    private UserDetailsService userDetailsService;
+    public  JwtRequestFilter(UserDetailsService userDetailsService,JwtUtilService jwtUtilService){
+        this.userDetailsService=userDetailsService;
+        this.jwtUtilService=jwtUtilService;
+    }
 
-    @Autowired
-    private JwtUtilService jwtUtilService;
-
+    /**
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param chain FilterChain
+     * @throws ServletException ServletException
+     * @throws IOException IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
