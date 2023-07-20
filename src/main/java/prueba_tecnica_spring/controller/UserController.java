@@ -35,7 +35,7 @@ public class UserController {
 	}
 
 	@GetMapping("/withrols/{username}")
-	public List<UserModel> getAllWithRols(@PathVariable String username) {
+	public UserModel getAllWithRols(@PathVariable String username) {
 		return userService.getAllUserWithRols(username);
 	}
 

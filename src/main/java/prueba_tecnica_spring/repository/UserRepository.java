@@ -23,6 +23,9 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
     int countUsersByPersonId(Long personId);
 
 	@Query(value = "SELECT * FROM get_user_data_by_username(:username)", nativeQuery = true)
-	List<UserModel> getUserDataByUsername(String username);
+	UserModel getUserWithRolsByUsername(String username);
+
+	@Query(value = "SELECT * FROM get_user_with_sessions(:username)", nativeQuery = true)
+	UserModel getUserWithSessionsByUsername(String username);
 
 }

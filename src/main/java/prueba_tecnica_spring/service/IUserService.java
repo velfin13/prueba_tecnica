@@ -8,7 +8,7 @@ public interface IUserService {
 
 	List<UserModel> getAll();
 
-	List<UserModel> getAllUserWithRols(String username);
+	UserModel getAllUserWithRols(String username);
 
 	UserModel getById(Long id);
 
