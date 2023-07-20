@@ -70,7 +70,7 @@ public class UserServiceImpl implements IUserService {
         if (user != null) {
             List<SessionModel> sessions = sessionRepository.findOpenSessionsByUserId(user.getId());
 
-            // Imprimir los ID de las sesiones
+            // guardar la fecha del cierre de sesion
             for (SessionModel session : sessions) {
                session.setFechaCierre(new Date());
                sessionRepository.save(session);
