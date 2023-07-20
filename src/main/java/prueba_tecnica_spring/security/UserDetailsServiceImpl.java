@@ -44,15 +44,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	            throw new UsernameNotFoundException("Usuario no encontrado: " + user);
 	        }
 
-		 return new org.springframework.security.core.userdetails.User(
-				 user.getUsername(),
-				 user.getPassword(),
-				 getAuthorities(user.getRoles())
-		 );
+			return User
+					.builder()
+					.username(user.getUsername())
+					.password(user.getPassword())
+					.authorities(getAuthorities(user.getRoles()))
+					.build();
+//		 return new User(
+//				 user.getUsername(),
+//				 user.getPassword(),
+//				 getAuthorities(user.getRoles())
+//		 );
 	    }
-	private Collection<? extends GrantedAuthority> getAuthorities(List<Rol> roles) {
+	private Collection<GrantedAuthority> getAuthorities(List<Rol> roles) {
 		return roles.stream()
-				.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+				.map(role -> new SimpleGrantedAuthority(role.getName()))
 				.collect(Collectors.toList());
 	}
 
